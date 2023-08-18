@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Image,
   ScrollView,
@@ -11,7 +11,8 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-import Images from './assets/image/cat.png';
+import Images from './assets/img/cat.png';
+import axios from './utils/axios';
 
 const styles = StyleSheet.create({
   container: {
@@ -26,11 +27,30 @@ const styles = StyleSheet.create({
 const App = () => {
   const [num, setNum] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [data, setData] = useState();
+  const [weather, setWeather] = useState();
+  useEffect(() => {
+    const getWeather = async () => {
+      try {
+        const res = await axios.get();
+        setData(res.data);
+        setWeather(res.data?.weather);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    getWeather();
+  }, [setData]);
   return (
     <>
       <ScrollView style={styles.container}>
         <View style={{ alignItems: 'center', marginBottom: 20 }}>
-          <Text style={{ fontSize: 20 }}>isLoading?</Text>
+          <Text style={{ fontSize: 20 }}>
+            {weather?.map((item) => {
+              item.description;
+              console.log(item.description);
+            })}
+          </Text>
           <Button
             title="Toggle"
             color="green"
